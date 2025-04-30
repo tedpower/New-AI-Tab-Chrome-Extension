@@ -27,6 +27,15 @@ body {
   }
 }
 
+a {
+  color: rgb(29, 155, 209);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 body {
   color: var(--foreground);
   background-color: var(--background);
@@ -53,11 +62,12 @@ body {
 #promptWrapper {
   border-radius: 2rem;
   max-width: 40rem;
+  margin: 2rem;
   display: flex;
   width: 100%;
   padding: 0.75rem;
   gap: 0.75rem;
-  box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.11);
+  box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.1);
 }
 
 #promptWrapper.focus {
@@ -79,12 +89,12 @@ body {
 }
 
 #sendWrap {
-  display: flex;
   flex-direction: row;
   align-items: flex-end;
+  display: none;
 }
 
-#send {
+.circleButton {
   background-color: var(--foreground);
   border: none;
   border-radius: 2rem;
@@ -95,10 +105,16 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  opacity: 0.9;
 }
 
-#send svg {
+.circleButton svg {
   stroke: var(--background);
+}
+
+.circleButton:hover {
+  opacity: 1;
 }
 
 #controlPanel {
@@ -111,70 +127,158 @@ body {
 
 #assistantSelect {
   padding: 0 1rem;
-  border-radius: 2rem;
+  border-radius: 1.125rem;
   font-size: 0.875rem;
-  height: 2rem;
+  height: 2.25rem;
   display: flex;
   align-items: center;
+  cursor: pointer;
   border: none;
-  box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.11);
+  box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.1);
+  background-color: var(--background);
+  anchor-name: --select;
+
   &,
   &::picker(select) {
     appearance: base-select;
   }
+  &:where(:hover) {
+    background-color: var(--highlight-soft);
+  }
+  &:where(:active) {
+    background-color: var(--highlight-hard);
+  }
+  &::picker(select) {
+    position-anchor: --select;
+    bottom: anchor(top);
+    right: anchor(right);
+    background: transparent;
+    overflow: visible;
+    border: none;
+    opacity: 0;
+    transition: opacity 0.2s ease, display 0.2s, overlay 0.2s;
+    transition-behavior: allow-discrete;
+  }
+  &:open::picker(select) {
+    opacity: 1;
+    @starting-style {
+      opacity: 0;
+    }
+  }
+  &:open .optionWrap {
+    transform: scale(1) translateY(0);
+    @starting-style {
+      transform: scale(0.95) translateY(0.5rem);
+    }
+  }
+  .optionWrap {
+    padding: 0.375rem;
+    margin: 0.75rem 0;
+    border-radius: 1.125rem;
+    box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.1),
+      0 1rem 3rem rgba(0, 0, 0, 0.5);
+    background-color: var(--highlight-soft);
+    transform: scale(0.95) translateY(0.5rem);
+    transition: transform 0.2s ease-out;
+  }
 
-  /* nice layout for the selected state */
-  selectedcontent {
+  &::picker-icon {
+    content: "";
+    width: 16px;
+    height: 16px;
+    background-image: url("images/down-light.svg");
+    opacity: 0.5;
+    transition: rotate 0.2s cubic-bezier(0.5, 1, 0.75, 1.25);
+  }
+  &:open::picker-icon {
+    rotate: 180deg;
+  }
+  option {
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
+    cursor: pointer;
+    color: var(--foreground);
+    border-radius: 0.75rem;
+    margin-bottom: 0.25rem;
     display: flex;
+    gap: 0.75rem;
     align-items: center;
-    gap: 0.5ch;
-
-    /* hide anything not an svg */
-    > :not(svg) {
+    &:where(:hover, :focus, :active) {
+      background-color: rgba(var(--foreground-alpha), 0.1);
+    }
+    &:checked {
+      background-color: rgba(var(--foreground-alpha), 0.1);
+    }
+    &:checked:hover {
+      background-color: rgba(var(--foreground-alpha), 0.15);
+    }
+    &::checkmark {
       display: none;
     }
   }
 
-  /* icon at the end with grid */
-  option {
-    display: grid;
-    grid-template-columns: [icon] auto [content] 1fr [mark] auto;
+  option img {
+    opacity: 0.75;
+  }
 
-    &::checkmark {
-      grid-area: 1 / mark;
-    }
+  option:last-child {
+    margin-bottom: 0;
   }
 }
 
 #infoButton {
-  background-color: #1e1e1e; /* dark background */
-  color: #f5f5f5; /* light text */
-  border: 1px solid #444; /* optional: subtle border */
+  background-color: var(--background);
+  color: var(--foreground);
+  box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.1);
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 2rem;
-  width: 2rem;
-  height: 2rem;
+  border-radius: 1.125rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  &:where(:hover) {
+    background-color: var(--highlight-soft);
+  }
+  &:where(:active) {
+    background-color: var(--highlight-hard);
+  }
 }
 
 #infoModal {
-  background-color: var(--background);
+  background-color: var(--highlight-soft);
   color: var(--foreground);
-  transform: translateY(-20px);
+  border: none;
+  box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.1),
+    0 1rem 3rem rgba(0, 0, 0, 0.5);
+  border-radius: 2rem;
+  width: min(100% - 4rem, 40rem);
+  padding: 3rem;
+  position: relative;
+  transform: scale(0.95) (-20px);
   &,
   &::backdrop {
-    transition: display 1s allow-discrete, overlay 1s allow-discrete, opacity 1s,
-      transform 1s;
+    transition: display 0.3s allow-discrete, overlay 0.3s allow-discrete,
+      opacity 0.3s, transform 0.3s;
     opacity: 0;
   }
 
   &[open] {
     opacity: 1;
-    transform: translateY(0px);
+    transform: scale(1) translateY(0px);
     &::backdrop {
       opacity: 1;
     }
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   @starting-style {
@@ -182,9 +286,14 @@ body {
     &[open]::backdrop {
       opacity: 0;
     }
-
     &[open] {
-      transform: translateY(20px);
+      transform: scale(0.95) translateY(20px);
     }
   }
+}
+
+#closeInfo {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
 }

@@ -3,6 +3,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const sendButton = document.getElementById("sendWrap");
   const form = document.getElementById("promptWrapper");
 
+  function updatePlaceholder(target) {
+    const assistantPlaceholderString = {
+      claude: "Ask Claude anything...",
+      chatgpt: "Ask ChatGPT anything...",
+      gemini: "Ask Gemini anything...",
+    };
+    textarea.placeholder =
+      assistantPlaceholderString[target] || "Ask anything...";
+  }
+
+  // Set the placeholder string based on the target
+  chrome.storage.sync.get(["target"], (result) => {
+    updatePlaceholder(result.target || "");
+  });
+
   textarea.addEventListener("keydown", async function (e) {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -56,15 +71,17 @@ document.addEventListener("DOMContentLoaded", () => {
     infoModal.close();
   });
 
-  // saveBtn.addEventListener("click", (e) => {
-  //   e.preventDefault(); // prevent form submission
-  //   const selected = modal.querySelector('input[name="assistant"]:checked');
-  //   if (selected) {
-  //     saveSettings(selected.value, () => {
-  //       modal.close();
-  //     });
-  //   }
-  // });
+  infoModal.addEventListener("click", (event) => {
+    const rect = infoModal.getBoundingClientRect();
+    const clickedOutside =
+      event.clientX < rect.left ||
+      event.clientX > rect.right ||
+      event.clientY < rect.top ||
+      event.clientY > rect.bottom;
+    if (clickedOutside) {
+      infoModal.close();
+    }
+  });
 
   textarea.addEventListener("focus", () => {
     form.classList.add("focus");
@@ -76,13 +93,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const select = document.getElementById("assistantSelect");
 
-  // Load current setting
   chrome.storage.sync.get("target", ({ target }) => {
     select.value = target || "claude";
   });
 
-  // Save on change
   select.addEventListener("change", () => {
     chrome.storage.sync.set({ target: select.value });
+    updatePlaceholder(select.value);
   });
 });
