@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Tabula Rasa",
+  "version": "1.0",
+  "description": "Put minimalist chat on your new tab page.",
+  "icons": {
+    "128": "icon128.png"
+  },
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["https://claude.ai/*"],
+      "js": ["claude.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://chat.openai.com/*"],
+      "js": ["chatgpt.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://gemini.google.com/*"],
+      "js": ["gemini.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
