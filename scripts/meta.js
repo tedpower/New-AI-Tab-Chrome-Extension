@@ -14,7 +14,7 @@ function waitForElement(selector, timeout = 10000) {
         clearInterval(interval);
         reject(new Error("Element not found: " + selector));
       }
-    }, 100);
+    }, 500);
   });
 }
 
@@ -23,14 +23,23 @@ function waitForElement(selector, timeout = 10000) {
   if (!prompt) return;
 
   try {
-    // Find the textarea and set its value
-    const textarea = await waitForElement('textarea[placeholder*="Message"]');
-    textarea.focus();
-    textarea.value = prompt;
+    // Step 1: Find contenteditable div inside rich-textarea
+    const editor = await waitForElement('div[contenteditable="true"]');
+    editor.focus();
 
-    // Trigger input event
-    textarea.dispatchEvent(new Event("input", { bubbles: true }));
+    // Step 2: Replace existing content
+    editor.innerHTML = `<p>${prompt}</p>`;
+
+    // Step 3: Trigger input event for React to recognize the change
+    editor.dispatchEvent(new Event("input", { bubbles: true }));
+    editor.dispatchEvent(new Event("blur", { bubbles: true }));
+
+    // Step 4: Wait and click the send button
+    const sendButton = await waitForElement(
+      'div[role="button"][aria-label="Send Message"]'
+    );
+    sendButton.click();
   } catch (err) {
-    console.error("Meta content script failed:", err);
+    console.error("Failed to inject prompt into Meta:", err);
   }
 })();

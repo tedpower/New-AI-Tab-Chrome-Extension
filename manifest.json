@@ -17,7 +17,7 @@
       "run_at": "document_idle"
     },
     {
-      "matches": ["https://chat.openai.com/*"],
+      "matches": ["https://chatgpt.com/*"],
       "js": ["scripts/chatgpt.js"],
       "run_at": "document_idle"
     },
@@ -27,12 +27,12 @@
       "run_at": "document_idle"
     },
     {
-      "matches": ["https://meta.ai/*"],
+      "matches": ["https://www.meta.ai/*"],
       "js": ["scripts/meta.js"],
       "run_at": "document_idle"
     },
     {
-      "matches": ["https://grok.x.ai/*"],
+      "matches": ["https://grok.com/*"],
       "js": ["scripts/grok.js"],
       "run_at": "document_idle"
     }

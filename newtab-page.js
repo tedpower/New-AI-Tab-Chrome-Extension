@@ -38,13 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
             )}`;
             break;
           case "chatgpt":
-            url = `https://chat.openai.com/?q=${encodeURIComponent(query)}`;
+            url = `https://chatgpt.com/?q=${encodeURIComponent(query)}`;
             break;
           case "grok":
-            url = `https://grok.x.ai/?q=${encodeURIComponent(query)}`;
+            url = `https://grok.com/?q=${encodeURIComponent(query)}`;
             break;
           case "meta":
-            url = `https://meta.ai/?q=${encodeURIComponent(query)}`;
+            url = `https://www.meta.ai/?q=${encodeURIComponent(query)}`;
             break;
           case "claude":
           default:
