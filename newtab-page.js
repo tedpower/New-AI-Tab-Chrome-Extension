@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
       claude: "Ask Claude anything...",
       chatgpt: "Ask ChatGPT anything...",
       gemini: "Ask Gemini anything...",
+      grok: "Ask Grok anything...",
+      meta: "Ask Meta anything...",
     };
     textarea.placeholder =
       assistantPlaceholderString[target] || "Ask anything...";
@@ -37,6 +39,12 @@ document.addEventListener("DOMContentLoaded", () => {
             break;
           case "chatgpt":
             url = `https://chat.openai.com/?q=${encodeURIComponent(query)}`;
+            break;
+          case "grok":
+            url = `https://grok.x.ai/?q=${encodeURIComponent(query)}`;
+            break;
+          case "meta":
+            url = `https://meta.ai/?q=${encodeURIComponent(query)}`;
             break;
           case "claude":
           default:

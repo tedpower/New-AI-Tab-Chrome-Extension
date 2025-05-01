@@ -13,17 +13,27 @@
   "content_scripts": [
     {
       "matches": ["https://claude.ai/*"],
-      "js": ["claude.js"],
+      "js": ["scripts/claude.js"],
       "run_at": "document_idle"
     },
     {
       "matches": ["https://chat.openai.com/*"],
-      "js": ["chatgpt.js"],
+      "js": ["scripts/chatgpt.js"],
       "run_at": "document_idle"
     },
     {
       "matches": ["https://gemini.google.com/*"],
-      "js": ["gemini.js"],
+      "js": ["scripts/gemini.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://meta.ai/*"],
+      "js": ["scripts/meta.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://grok.x.ai/*"],
+      "js": ["scripts/grok.js"],
       "run_at": "document_idle"
     }
   ]

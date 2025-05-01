@@ -126,7 +126,7 @@ body {
 }
 
 #assistantSelect {
-  padding: 0 1rem;
+  padding: 0 0.75rem 0 1rem;
   border-radius: 1.125rem;
   font-size: 0.875rem;
   height: 2.25rem;
@@ -142,12 +142,15 @@ body {
   &::picker(select) {
     appearance: base-select;
   }
+
   &:where(:hover) {
     background-color: var(--highlight-soft);
   }
+
   &:where(:active) {
     background-color: var(--highlight-hard);
   }
+
   &::picker(select) {
     position-anchor: --select;
     bottom: anchor(top);
@@ -159,25 +162,28 @@ body {
     transition: opacity 0.2s ease, display 0.2s, overlay 0.2s;
     transition-behavior: allow-discrete;
   }
+
   &:open::picker(select) {
     opacity: 1;
     @starting-style {
       opacity: 0;
     }
   }
+
   &:open .optionWrap {
     transform: scale(1) translateY(0);
     @starting-style {
       transform: scale(0.95) translateY(0.5rem);
     }
   }
+
   .optionWrap {
     padding: 0.375rem;
     margin: 0.75rem 0;
     border-radius: 1.125rem;
-    box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.1),
-      0 1rem 3rem rgba(0, 0, 0, 0.5);
-    background-color: var(--highlight-soft);
+    box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.15),
+      0 1rem 2rem rgba(0, 0, 0, 0.1);
+    background-color: var(--background);
     transform: scale(0.95) translateY(0.5rem);
     transition: transform 0.2s ease-out;
   }
@@ -186,31 +192,37 @@ body {
     content: "";
     width: 16px;
     height: 16px;
-    background-image: url("images/down-light.svg");
+    background-image: url("images/down.svg");
     opacity: 0.5;
     transition: rotate 0.2s cubic-bezier(0.5, 1, 0.75, 1.25);
   }
+
   &:open::picker-icon {
     rotate: 180deg;
   }
+
   option {
     padding: 0.5rem 2rem 0.5rem 0.5rem;
     cursor: pointer;
     color: var(--foreground);
     border-radius: 0.75rem;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.125rem;
     display: flex;
     gap: 0.75rem;
     align-items: center;
+
     &:where(:hover, :focus, :active) {
       background-color: rgba(var(--foreground-alpha), 0.1);
     }
+
     &:checked {
       background-color: rgba(var(--foreground-alpha), 0.1);
     }
+
     &:checked:hover {
       background-color: rgba(var(--foreground-alpha), 0.15);
     }
+
     &::checkmark {
       display: none;
     }
@@ -222,6 +234,14 @@ body {
 
   option:last-child {
     margin-bottom: 0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  #assistantSelect .optionWrap {
+    background-color: var(--highlight-soft);
+    box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.1),
+      0 1rem 2rem rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -238,25 +258,28 @@ body {
   height: 2.25rem;
   cursor: pointer;
   font-size: 0.875rem;
+
   &:where(:hover) {
     background-color: var(--highlight-soft);
   }
+
   &:where(:active) {
     background-color: var(--highlight-hard);
   }
 }
 
 #infoModal {
-  background-color: var(--highlight-soft);
+  background-color: var(--background);
   color: var(--foreground);
   border: none;
-  box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.1),
-    0 1rem 3rem rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.15),
+    0 1rem 2rem rgba(0, 0, 0, 0.1);
   border-radius: 2rem;
   width: min(100% - 4rem, 40rem);
-  padding: 3rem;
+  padding: 2.25rem;
   position: relative;
   transform: scale(0.95) (-20px);
+
   &,
   &::backdrop {
     transition: display 0.3s allow-discrete, overlay 0.3s allow-discrete,
@@ -272,6 +295,21 @@ body {
     }
   }
 
+  @starting-style {
+    &[open],
+    &[open]::backdrop {
+      opacity: 0;
+    }
+
+    &[open] {
+      transform: scale(0.95) translateY(20px);
+    }
+  }
+
+  &::backdrop {
+    background-color: rgba(var(--foreground-alpha), 0.02);
+  }
+
   ul {
     list-style: none;
     margin: 0;
@@ -281,14 +319,56 @@ body {
     gap: 1rem;
   }
 
-  @starting-style {
-    &[open],
-    &[open]::backdrop {
-      opacity: 0;
-    }
-    &[open] {
-      transform: scale(0.95) translateY(20px);
-    }
+  hr {
+    margin: 1.5rem 0;
+    background-color: rgba(var(--foreground-alpha), 0.15);
+    border: none;
+    height: 1px;
+  }
+
+  p:first-child {
+    margin-top: 0;
+  }
+
+  .closeButton {
+    background-color: var(--highlight-soft);
+    border: none;
+    border-radius: 2rem;
+    padding: 0;
+    margin: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0.75;
+    transform-origin: center center;
+    transition: box-shadow 0.1s ease-in-out 0s, transform 0.1s ease-in-out 0s;
+  }
+
+  .closeButton svg {
+    stroke: var(--foreground);
+  }
+
+  .closeButton:hover {
+    opacity: 1;
+  }
+
+  .closeButton:active {
+    transform: scale(0.9);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  #infoModal {
+    background-color: var(--highlight-soft);
+    box-shadow: inset 0 0 0 1px rgba(var(--foreground-alpha), 0.1),
+      0 1rem 2rem rgba(0, 0, 0, 0.3);
+  }
+
+  #infoModal .closeButton {
+    background-color: var(--background);
   }
 }
 
